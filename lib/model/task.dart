@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +11,6 @@ class Task extends ChangeNotifier {
 
   String title;
   String desc;
-  bool _value = false;
   CheckBoxNotifier checkBoxNotifier = CheckBoxNotifier();
   late final checkBoxValueProvider;
 }
