@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todolist_app/const/const.dart';
+import 'package:todolist_app/const/data.dart';
 import 'package:todolist_app/ui/home.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
