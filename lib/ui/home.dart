@@ -132,7 +132,27 @@ class Home extends StatelessWidget {
                             showDialog(
                                 context: context,
                                 builder: (context) => alert(context,
-                                    tombolLabel: "Add", judul: "Add New Task"));
+                                    tombolLabel: "Add",
+                                    judul: "Add New Task",
+                                    onAccept: onDoneAlert(context,
+                                        icon: Icon(
+                                          Icons.done_outline_sharp,
+                                          color: Colors.green,
+                                          size: 60,
+                                        ),
+                                        message: myText(
+                                            "Task Successfully Added",
+                                            color: Colors.green),
+                                        action: [
+                                          TextButton(child: myText("Continue",color: Colors.green),
+                                              onPressed: () {
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Home()));
+                                          })
+                                        ])));
                           },
                           child:
                               myText("Add New", size: 12, color: primaryColor))

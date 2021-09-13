@@ -7,7 +7,7 @@ import 'package:todolist_app/ui/widgets/custom_widget/custom_widget.dart';
 import '../../home.dart';
 
 Widget alert(BuildContext context,
-        {required String judul, required String tombolLabel}) =>
+        {required String judul, required String tombolLabel,required Widget onAccept }) =>
     AlertDialog(
       title:
           myText(judul, color: Colors.black, size: 16, bold: FontWeight.w600),
@@ -35,8 +35,7 @@ Widget alert(BuildContext context,
                   width: 8,
                 ),
                 customButton(tombolLabel, color: primaryColor, onPressed: () {
-                  Navigator.pushReplacement(
-                      context, MaterialPageRoute(builder: (context) => Home()));
+                  showDialog(context: context, builder: (context)=> onAccept);
                 }),
               ],
             )
@@ -73,6 +72,29 @@ Widget confirmationAlert(BuildContext context) {
                     context, MaterialPageRoute(builder: (context) => Home()));
               })
             ],
+          )
+        ],
+      ),
+    ),
+  );
+}
+
+Widget onDoneAlert(BuildContext context,{required Widget icon,required Widget message, required List<Widget> action}) {
+  double screenWidth = MediaQuery.of(context).size.width;
+  double screenHeight = MediaQuery.of(context).size.height;
+
+  return AlertDialog(
+    content: SizedBox(
+      height: screenHeight / 6,
+      width: screenWidth / 1.5,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          icon,
+          message,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: action,
           )
         ],
       ),

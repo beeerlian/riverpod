@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todolist_app/const/data.dart';
 import 'package:todolist_app/model/task.dart';
+import 'package:todolist_app/ui/home.dart';
 import 'package:todolist_app/ui/widgets/alert_dialog/alert_dialog.dart';
 import 'package:todolist_app/ui/widgets/custom_widget/custom_widget.dart';
 
@@ -54,53 +55,76 @@ class Item extends ConsumerWidget {
                 ),
               ],
             ),
-            IconButton(
-                onPressed: () {
-                  showMenu(
-                      context: context,
-                      position: RelativeRect.fromLTRB(100, 300, 70, 0),
-                      items: [
-                        PopupMenuItem(
-                          child: InkWell(
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => alert(context,
-                                      judul: "Edit Task",
-                                      tombolLabel: "Add Changes"));
-                            },
-                            child: Row(
-                              children: [
-                                Icon(Icons.edit),
-                                SizedBox(
-                                  width: 8,
+            PopupMenuButton(
+                padding: EdgeInsets.zero,
+                child: Icon(Icons.menu),
+                itemBuilder: (context) {
+                  return [
+                    PopupMenuItem(
+                      child: InkWell(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => alert(
+                              context,
+                              judul: "Edit Task",
+                              tombolLabel: "Add Changes",
+                              onAccept: onDoneAlert(
+                                context,
+                                icon: Icon(
+                                  Icons.done_outline_sharp,
+                                  color: Colors.yellow,
+                                  size: 60,
                                 ),
-                                myText("Edit", color: Colors.black),
-                              ],
-                            ),
-                          ),
-                        ),
-                        PopupMenuItem(
-                            child: InkWell(
-                          onTap: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) =>
-                                    confirmationAlert(context));
-                          },
-                          child: Row(
-                            children: [
-                              Icon(Icons.delete),
-                              SizedBox(
-                                width: 8,
+                                message: myText("Task Successfully Edited",
+                                    color: Colors.yellow),
+                                action: [
+                                  TextButton(
+                                    child: myText("Continue", color: Colors.yellow),
+                                    onPressed: () {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Home(),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
                               ),
-                              myText("Delete", color: Colors.black),
-                            ],
+                            ),
+                          );
+                        },
+                        child: Row(
+                          children: [
+                            Icon(Icons.edit),
+                            SizedBox(
+                              width: 8,
+                            ),
+                            myText("Edit", color: Colors.black),
+                          ],
+                        ),
+                      ),
+                    ),
+                    PopupMenuItem(
+                        child: InkWell(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => confirmationAlert(context));
+                      },
+                      child: Row(
+                        children: [
+                          Icon(Icons.delete),
+                          SizedBox(
+                            width: 8,
                           ),
-                        ))
-                      ]);
-                },
-                icon: Icon(Icons.menu))
+                          myText("Delete", color: Colors.black),
+                        ],
+                      ),
+                    ))
+                  ];
+                }),
           ],
         ),
       ),
