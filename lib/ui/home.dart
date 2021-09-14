@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todolist_app/const/data.dart';
+import 'package:todolist_app/model/task.dart';
+import 'package:todolist_app/provider/db_provider.dart';
 import 'package:todolist_app/ui/widgets/alert_dialog/alert_dialog.dart';
 import 'package:todolist_app/ui/widgets/custom_widget/custom_widget.dart';
 import 'package:todolist_app/ui/widgets/item/item.dart';
@@ -130,29 +132,44 @@ class Home extends StatelessWidget {
                                           Radius.circular(8))))),
                           onPressed: () {
                             showDialog(
-                                context: context,
-                                builder: (context) => alert(context,
-                                    tombolLabel: "Add",
-                                    judul: "Add New Task",
-                                    onAccept: onDoneAlert(context,
-                                        icon: Icon(
-                                          Icons.done_outline_sharp,
-                                          color: Colors.green,
-                                          size: 60,
-                                        ),
-                                        message: myText(
-                                            "Task Successfully Added",
+                              context: context,
+                              builder: (context) => alert(context,
+                                  tombolLabel: "Add",
+                                  judul: "Add New Task", onAccept: () {
+                                DatabaseProvider.db.addTask(MyTask(
+                                    title: "Learn Flutter",
+                                    description:
+                                        "Im going to learn flutter from BSO Android UIN SGD",
+                                    isDone: false));
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => onDoneAlert(
+                                    context,
+                                    icon: Icon(
+                                      Icons.done_outline_sharp,
+                                      color: Colors.green,
+                                      size: 60,
+                                    ),
+                                    message: myText("Task Successfully Added",
+                                        color: Colors.green),
+                                    action: [
+                                      TextButton(
+                                        child: myText("Continue",
                                             color: Colors.green),
-                                        action: [
-                                          TextButton(child: myText("Continue",color: Colors.green),
-                                              onPressed: () {
-                                            Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Home()));
-                                          })
-                                        ])));
+                                        onPressed: () {
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => Home(),
+                                            ),
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                );
+                              }),
+                            );
                           },
                           child:
                               myText("Add New", size: 12, color: primaryColor))
@@ -186,13 +203,44 @@ class Home extends StatelessWidget {
               ),
             ),
             Container(
+              constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height - 160 - 88),
               color: Colors.white,
               padding: EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                children: [
-                  for (var i = 0; i < tasks.length; i++) Item(task: tasks[i])
-                ],
-              ),
+              child: FutureBuilder<List<MyTask>>(
+                  future: DatabaseProvider.db.getAllTask(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      print("snapshot connection loading");
+                      return CircularProgressIndicator();
+                    }
+                    if (snapshot.hasData) {
+                      print("snapshot has data");
+                      return Column(
+                        children: snapshot.data!
+                            .map((task) => Item(
+                                  task: task,
+                                ))
+                            .toList(),
+                      );
+                    } else {
+                      print("snapshot null");
+                      return Center(
+                        child: ElevatedButton(
+                            onPressed: () {
+                              DatabaseProvider.db.addTask(MyTask(
+                                  id: snapshot.hasData
+                                      ? snapshot.data!.length + 1
+                                      : 1,
+                                  title: "Learn Flutter",
+                                  description:
+                                      "Im going to learn flutter from BSO Android UIN SGD",
+                                  isDone: false));
+                            },
+                            child: myText("Add")),
+                      );
+                    }
+                  }),
             )
           ],
         ),

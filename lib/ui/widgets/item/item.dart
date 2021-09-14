@@ -8,7 +8,7 @@ import 'package:todolist_app/ui/widgets/custom_widget/custom_widget.dart';
 
 class Item extends ConsumerWidget {
   Item({Key? key, required this.task}) : super(key: key);
-  Task task;
+  MyTask task;
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final checkBoxvalue = watch(task.checkBoxValueProvider);
@@ -42,10 +42,10 @@ class Item extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      myText("Learn Flutter",
+                      myText(task.title+"  "+task.id.toString(),
                           color: Colors.black, bold: FontWeight.w700),
                       Text(
-                        "I'm going to learn flutter from udemy course, I'm going to learn flutter from udemy course",
+                        task.description,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: insideFieldTextStyle(),
@@ -69,7 +69,8 @@ class Item extends ConsumerWidget {
                               context,
                               judul: "Edit Task",
                               tombolLabel: "Add Changes",
-                              onAccept: onDoneAlert(
+                              onAccept: (){
+                                showDialog(context: context, builder: (context)=> onDoneAlert(
                                 context,
                                 icon: Icon(
                                   Icons.done_outline_sharp,
@@ -92,6 +93,8 @@ class Item extends ConsumerWidget {
                                   ),
                                 ],
                               ),
+                            );
+                              }
                             ),
                           );
                         },

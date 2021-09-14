@@ -25,6 +25,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_riverpod: ^0.14.0+3
+  path_provider: any
+  sqflite: any
 
 dev_dependencies:
   flutter_test:

@@ -7,42 +7,46 @@ import 'package:todolist_app/ui/widgets/custom_widget/custom_widget.dart';
 import '../../home.dart';
 
 Widget alert(BuildContext context,
-        {required String judul, required String tombolLabel,required Widget onAccept }) =>
-    AlertDialog(
-      title:
-          myText(judul, color: Colors.black, size: 16, bold: FontWeight.w600),
-      content: SizedBox(
-        width: 364,
-        height: 402,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            myText("Task Name",
-                color: Colors.black, size: 12, bold: FontWeight.w600),
-            SearchBarCustom("Task Name", padding: EdgeInsets.all(8)),
-            myText("Task Detail",
-                color: Colors.black, size: 12, bold: FontWeight.w600),
-            SearchBarCustom("Task Detail",
-                maxLines: 10, padding: EdgeInsets.all(8)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                customButton("cancel", color: Color(0xFF82868B), onPressed: () {
-                  Navigator.pop(context);
-                }),
-                SizedBox(
-                  width: 8,
-                ),
-                customButton(tombolLabel, color: primaryColor, onPressed: () {
-                  showDialog(context: context, builder: (context)=> onAccept);
-                }),
-              ],
-            )
-          ],
-        ),
+    {required String judul,
+    required String tombolLabel,
+    required Function() onAccept}) {
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descripstionController = TextEditingController();
+
+  return AlertDialog(
+    title: myText(judul, color: Colors.black, size: 16, bold: FontWeight.w600),
+    content: SizedBox(
+      width: 364,
+      height: 402,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          myText("Task Name",
+              color: Colors.black, size: 12, bold: FontWeight.w600),
+          SearchBarCustom("Task Name", padding: EdgeInsets.all(8)),
+          myText("Task Detail",
+              color: Colors.black, size: 12, bold: FontWeight.w600),
+          SearchBarCustom("Task Detail",
+              maxLines: 10, padding: EdgeInsets.all(8)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              customButton("cancel", color: Color(0xFF82868B), onPressed: () {
+                Navigator.pop(context);
+              }),
+              SizedBox(
+                width: 8,
+              ),
+              customButton(tombolLabel,
+                  color: primaryColor, onPressed: onAccept),
+            ],
+          )
+        ],
       ),
-    );
+    ),
+  );
+}
 
 Widget confirmationAlert(BuildContext context) {
   double screenWidth = MediaQuery.of(context).size.width;
@@ -79,7 +83,10 @@ Widget confirmationAlert(BuildContext context) {
   );
 }
 
-Widget onDoneAlert(BuildContext context,{required Widget icon,required Widget message, required List<Widget> action}) {
+Widget onDoneAlert(BuildContext context,
+    {required Widget icon,
+    required Widget message,
+    required List<Widget> action}) {
   double screenWidth = MediaQuery.of(context).size.width;
   double screenHeight = MediaQuery.of(context).size.height;
 
